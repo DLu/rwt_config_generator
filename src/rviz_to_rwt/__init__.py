@@ -178,6 +178,19 @@ class RWTConfig:
         
         self.add_object(d)
         
+    def add_path(self, name=None, topic='/path', color=None, comment='Setup the Path client.'):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.Path'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
+        d['color'] = color
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
+        
     def get_main_script(self):
         d = {}
         d.update(self.params)

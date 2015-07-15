@@ -44,6 +44,8 @@ for display in displays:
         c.add_imarkers(topic=topic)
     elif cls == 'rviz/PointCloud2':
         c.add_pointcloud(topic=display.get('Topic', None), size=display.get('Size (m)', None))
+    elif cls == 'rviz/Path':
+        c.add_path(topic=display.get('Topic', None), color=display.get('Color', None))
     else:
         warning("Class %s not supported yet!"%cls)    
         
