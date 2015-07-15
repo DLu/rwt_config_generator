@@ -95,7 +95,7 @@ class RWTConfig:
         s += ' '*4 + 'viewer.addObject(new ROS3D.Grid());'
         self.add_object(s)
         
-    def add_model(self, param=None, path='http://resources.robotwebtools.org/', comment='Setup the URDF client.'):
+    def add_model(self, param=None, path='http://resources.robotwebtools.org/', tfPrefix=None, comment='Setup the URDF client.'):
         d = OrderedDict()
         
         self.headers += COLLADA_HEADERS
@@ -105,6 +105,7 @@ class RWTConfig:
         d['ros'] = 'ros'
         d['param'] = param
         d['tfClient'] = self.add_tf_client()
+        d['tfPrefix'] = tfPrefix
         d['path'] = quote(path)
         d['rootObject'] = 'viewer.scene'
         d['loader'] = 'ROS3D.COLLADA_LOADER_2'
