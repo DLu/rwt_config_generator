@@ -7,7 +7,7 @@ BASIC_FRAME = """<!DOCTYPE html>
 
 %(headers)s
 
-<script>
+<script type="text/javascript">
 %(main_script)s
 </script>
 </head>
@@ -18,7 +18,7 @@ BASIC_FRAME = """<!DOCTYPE html>
 </html>
 """
 
-INCLUDE_TEMPLATE = '<script src="http://cdn.robotwebtools.org/%s"></script>'
+INCLUDE_TEMPLATE = '<script type="text/javascript" src="http://cdn.robotwebtools.org/%s"></script>'
 
 REQUIRED_HEADERS = ['threejs/current/three.min.js', 'EventEmitter2/current/eventemitter2.min.js', 
                     'roslibjs/current/roslib.min.js', 'ros3djs/current/ros3d.min.js']
