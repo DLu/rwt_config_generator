@@ -50,7 +50,9 @@ SCRIPT = """
 OBJECT_TEMPLATE = """%(comment)s    var %(name)s = new %(type)s(%(dict)s);\n\n"""
 
 def quote(s):
-    if s[0]=='"' or s[0]=="'":
+    if s is None:
+        return None
+    elif len(s)>0 and (s[0]=='"' or s[0]=="'"):
         return s
     else:
         return "'%s'"%s    
@@ -103,9 +105,9 @@ class RWTConfig:
         d['type'] = 'ROS3D.UrdfClient'
         d['comment'] = comment
         d['ros'] = 'ros'
-        d['param'] = param
+        d['param'] = quote(param)
         d['tfClient'] = self.add_tf_client()
-        d['tfPrefix'] = tfPrefix
+        d['tfPrefix'] = quote(tfPrefix)
         d['path'] = quote(path)
         d['rootObject'] = 'viewer.scene'
         d['loader'] = 'ROS3D.COLLADA_LOADER_2'
