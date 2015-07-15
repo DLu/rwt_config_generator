@@ -55,6 +55,14 @@ for display in displays:
         c.add_laserscan(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), size=display.get('Size (m)', None))
     elif cls == 'rviz/Path':
         c.add_path(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)))
+    elif cls == 'rviz/Polygon':
+        c.add_polygon(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)))
+    elif cls == 'rviz/Pose':
+        c.add_pose(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)),
+            shaft_radius=display.get('Shaft Radius', None),
+            head_radius=display.get('Head Radius', None),
+            shaft_length=display.get('Shaft Length', None),
+            head_length=display.get('Head Length', None))
     else:
         warning("Class %s not supported yet!"%cls)    
         

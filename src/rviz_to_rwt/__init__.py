@@ -205,6 +205,37 @@ class RWTConfig:
         
         self.add_object(d)
         
+    def add_polygon(self, name=None, topic='/polygon', color=None, comment='Setup the Path client.'):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.Polygon'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
+        d['color'] = color
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
+        
+    def add_pose(self, name=None, topic='/pose', color=None, shaft_radius=None, head_radius=None, 
+        shaft_length=None, head_length=None, comment=''):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.Pose'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
+        d['color'] = color
+        d['length'] = shaft_length
+        d['headLength'] = head_length
+        d['shaftDiameter'] = shaft_radius * 2
+        d['headDiameter'] = head_radius * 2
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
+        
     def get_main_script(self):
         d = {}
         d.update(self.params)
