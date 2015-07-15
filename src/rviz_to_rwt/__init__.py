@@ -130,11 +130,25 @@ class RWTConfig:
         d['type'] = 'ROS3D.MarkerClient'
         d['comment'] = comment
         d['ros'] = 'ros'
-        d['topic'] = topic
         d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
         d['rootObject'] = 'viewer.scene'
         
         self.add_object(d)
+
+    def add_imarkers(self, name='imClient', topic='/interactive_markers', comment='Setup the marker client.'):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.InteractiveMarkerClient'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
+        d['camera'] = 'viewer.camera'
+        d['rootObject'] = 'viewer.selectableObjects'
+        
+        self.add_object(d)
+        
         
     def get_main_script(self):
         d = {}
