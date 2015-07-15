@@ -56,8 +56,9 @@ def quote(s):
         return "'%s'"%s    
 
 class RWTConfig:
-    def __init__(self, host='localhost', div_id='robotdisplay', size=(800,600)):
+    def __init__(self, host='localhost', div_id='robotdisplay', size=(800,600), fixed_frame=None):
         self.div_id = div_id
+        self.fixed_frame = fixed_frame
         self.params = {'host': host, 'width': size[0], 'height': size[1], 'div_id': div_id}
         self.headers = REQUIRED_HEADERS
         self.names = set()
@@ -80,6 +81,8 @@ class RWTConfig:
         d['angularThres'] = angularThres
         d['transThres'] = transThres
         d['rate'] = rate
+        if self.fixed_frame:
+            d['fixedFrame'] = quote(self.fixed_frame)
         
         self.add_object(d)
         
@@ -117,6 +120,18 @@ class RWTConfig:
         d['topic'] = topic
         if tf:
             d['tfClient'] = self.add_tf_client()
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
+        
+    def add_markers(self, name=None, topic='/visualization_marker', comment='Setup the marker client.'):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.MarkerClient'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['topic'] = topic
+        d['tfClient'] = self.add_tf_client()
         d['rootObject'] = 'viewer.scene'
         
         self.add_object(d)
