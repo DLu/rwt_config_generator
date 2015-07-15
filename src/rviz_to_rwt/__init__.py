@@ -42,12 +42,18 @@ SCRIPT = """
       height : %(height)d,
       antialias : true
     });
-    
+
 %(objects)s
   }
 """
 
 OBJECT_TEMPLATE = """%(comment)s    var %(name)s = new %(type)s(%(dict)s);\n\n"""
+
+def quote(s):
+    if s[0]=='"' or s[0]=="'":
+        return s
+    else:
+        return "'%s'"%s    
 
 class RWTConfig:
     def __init__(self, host='localhost', div_id='robotdisplay', size=(800,600)):
@@ -55,17 +61,19 @@ class RWTConfig:
         self.params = {'host': host, 'width': size[0], 'height': size[1], 'div_id': div_id}
         self.headers = REQUIRED_HEADERS
         self.names = set()
-        self.tf = False
+        self.tf = None
         self.objects = []
         
     def add_object(self, d):
-        self.objects.append(d)    
+        self.objects.append(d) 
         
-    def add_tf_client(self, angularThres=0.01, transThres=0.01, rate=10.0, comment='Setup a client to listen to TFs'):
+
+    def add_tf_client(self, name='tfClient', angularThres=0.01, transThres=0.01, rate=10.0, comment='Setup a client to listen to TFs'):
         if self.tf:
-            return
-        self.tf = True    
+            return self.tf
+        self.tf = name    
         d = OrderedDict()
+        d['name'] = name
         d['type'] = 'ROSLIB.TFClient'
         d['comment'] = 'Setup a client to listen to TFs.'
         d['ros'] = 'ros'
@@ -75,11 +83,41 @@ class RWTConfig:
         
         self.add_object(d)
         
+        return self.tf
+        
+    def add_grid(self, comment='Add a grid.'):
+        s = ''
+        if comment:
+            s += ' '*4 + '// ' + comment + '\n'
+        s += ' '*4 + 'viewer.addObject(new ROS3D.Grid());'
+        self.add_object(s)
+        
+    def add_model(self, param=None, path='http://resources.robotwebtools.org/', comment='Setup the URDF client.'):
+        d = OrderedDict()
+        
+        self.headers += COLLADA_HEADERS
+        
+        d['type'] = 'ROS3D.UrdfClient'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['param'] = param
+        d['tfClient'] = self.add_tf_client()
+        d['path'] = quote(path)
+        d['rootObject'] = 'viewer.scene'
+        d['loader'] = 'ROS3D.COLLADA_LOADER_2'
+        
+        self.add_object(d)    
+        
     def get_main_script(self):
         d = {}
         d.update(self.params)
-        objects = self.objects
-        d['objects'] = '\n'.join( [self.get_object(p) for p in self.objects] )
+        object_strings = []
+        for o in self.objects:
+            if type(o)==str:
+                object_strings.append(o)
+            else:
+                object_strings.append( self.get_object(o) )
+        d['objects'] = '\n'.join( object_strings )
         return SCRIPT % d    
         
     def get_object(self, params):
@@ -113,6 +151,8 @@ class RWTConfig:
         if len(p2)>0:
             ps = []    
             for k,v in p2.iteritems():
+                if v is None:
+                    continue
                 ps.append('      %s : %s'%(k, str(v)))
             d['dict'] = '{\n%s\n    }'%',\n'.join(ps)
         else:
