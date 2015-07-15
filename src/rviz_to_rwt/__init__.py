@@ -164,6 +164,19 @@ class RWTConfig:
         
         self.add_object(d)
         
+    def add_pointcloud(self, name=None, topic='/points', size=None, max_pts=None, comment='Setup the Point Cloud client.'):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.PointCloud2'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
+        d['size'] = size
+        d['max_pts'] = max_pts
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
         
     def get_main_script(self):
         d = {}

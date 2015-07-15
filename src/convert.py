@@ -42,6 +42,8 @@ for display in displays:
         topic = display.get('Update Topic')
         topic = topic.replace('/update', '')
         c.add_imarkers(topic=topic)
+    elif cls == 'rviz/PointCloud2':
+        c.add_pointcloud(topic=display.get('Topic', None), size=display.get('Size (m)', None))
     else:
         warning("Class %s not supported yet!"%cls)    
         
