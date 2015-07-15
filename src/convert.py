@@ -34,6 +34,14 @@ for display in displays:
         c.add_grid()
     elif cls == 'rviz/RobotModel':
         c.add_model(param=display.get('Robot Description', None), tfPrefix=display.get('TF Prefix', None))        
+    elif cls == 'rviz/Marker':
+        c.add_markers(topic=display.get('Marker Topic', None))
+    elif cls == 'rviz/MarkerArray':
+        c.add_marker_array(topic=display.get('Marker Topic', None))    
+    elif cls == 'rviz/InteractiveMarkers':
+        topic = display.get('Update Topic')
+        topic = topic.replace('/update', '')
+        c.add_imarkers(topic=topic)
     else:
         warning("Class %s not supported yet!"%cls)    
         

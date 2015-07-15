@@ -136,6 +136,18 @@ class RWTConfig:
         d['rootObject'] = 'viewer.scene'
         
         self.add_object(d)
+        
+    def add_marker_array(self, name=None, topic='/visualization_marker_array', comment='Setup the marker client.'):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.MarkerArrayClient'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
 
     def add_imarkers(self, name='imClient', topic='/interactive_markers', comment='Setup the marker client.'):
         d = OrderedDict()
