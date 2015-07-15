@@ -15,6 +15,13 @@ args = parser.parse_args(rospy.myargv()[1:])
 
 rviz = yaml.load( open(args.rviz_config) )['Visualization Manager']
 
+def to_hex(s):
+    if s is None:
+        return None
+    ns = tuple(map(int, s.split(';')))
+    s = '0x%02x%02x%02x'%ns
+    return s
+
 def get(key, d=None):
     if d is None:
         d = rviz
@@ -44,8 +51,10 @@ for display in displays:
         c.add_imarkers(topic=topic)
     elif cls == 'rviz/PointCloud2':
         c.add_pointcloud(topic=display.get('Topic', None), size=display.get('Size (m)', None))
+    elif cls == 'rviz/LaserScan':
+        c.add_laserscan(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), size=display.get('Size (m)', None))
     elif cls == 'rviz/Path':
-        c.add_path(topic=display.get('Topic', None), color=display.get('Color', None))
+        c.add_path(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)))
     else:
         warning("Class %s not supported yet!"%cls)    
         
