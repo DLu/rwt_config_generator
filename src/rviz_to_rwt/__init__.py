@@ -106,7 +106,20 @@ class RWTConfig:
         d['rootObject'] = 'viewer.scene'
         d['loader'] = 'ROS3D.COLLADA_LOADER_2'
         
-        self.add_object(d)    
+        self.add_object(d)
+        
+    def add_map(self, name='gridClient', topic=None, tf=False, comment='Setup the map client.'):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.OccupancyGridClient'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['topic'] = topic
+        if tf:
+            d['tfClient'] = self.add_tf_client()
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
         
     def get_main_script(self):
         d = {}
@@ -126,7 +139,7 @@ class RWTConfig:
         d['type'] = p2['type']
         del p2['type']
         
-        if 'name' in p2:
+        if 'name' in p2 and p2['name'] is not None:
             d['name'] = p2['name']
             del p2['name']
         else:
