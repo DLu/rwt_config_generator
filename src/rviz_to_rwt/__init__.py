@@ -55,7 +55,13 @@ def quote(s):
     elif len(s)>0 and (s[0]=='"' or s[0]=="'"):
         return s
     else:
-        return "'%s'"%s    
+        return "'%s'"%s
+
+def double(d):
+    if d is None:
+        return None
+    else:
+        return d*2                
 
 class RWTConfig:
     def __init__(self, host='localhost', div_id='robotdisplay', size=(800,600), fixed_frame=None):
@@ -230,8 +236,55 @@ class RWTConfig:
         d['color'] = color
         d['length'] = shaft_length
         d['headLength'] = head_length
-        d['shaftDiameter'] = shaft_radius * 2
-        d['headDiameter'] = head_radius * 2
+        d['shaftDiameter'] = double(shaft_radius)
+        d['headDiameter'] = double(head_radius)
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
+        
+    def add_odometry(self, name=None, topic='/pose', color=None, keep=None, shaft_radius=None, head_radius=None, 
+        shaft_length=None, head_length=None, comment=''):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.Odometry'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
+        d['color'] = color
+        d['keep'] = keep
+        d['length'] = shaft_length
+        d['headLength'] = head_length
+        d['shaftDiameter'] = double(shaft_radius)
+        d['headDiameter'] = double(head_radius)
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
+        
+    def add_posearray(self, name=None, topic='/particlecloud', color=None, length=None, comment='Setup the PoseArray client.'):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.PoseArray'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
+        d['color'] = color
+        d['length'] = length
+        d['rootObject'] = 'viewer.scene'
+        
+        self.add_object(d)
+        
+    def add_point(self, name=None, topic='/point', color=None, radius=None, comment='Setup the Point client.'):
+        d = OrderedDict()
+        d['name'] = name
+        d['type'] = 'ROS3D.Point'
+        d['comment'] = comment
+        d['ros'] = 'ros'
+        d['tfClient'] = self.add_tf_client()
+        d['topic'] = quote(topic)
+        d['color'] = color
+        d['radius'] = radius
         d['rootObject'] = 'viewer.scene'
         
         self.add_object(d)

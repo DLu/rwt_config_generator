@@ -63,6 +63,14 @@ for display in displays:
             head_radius=display.get('Head Radius', None),
             shaft_length=display.get('Shaft Length', None),
             head_length=display.get('Head Length', None))
+    elif cls == 'rviz/Odometry':
+        c.add_odometry(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)),
+            shaft_length=display.get('Length', None), keep=display.get('Keep', None))
+
+    elif cls == 'rviz/PoseArray':
+        c.add_posearray(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), length=display.get('Arrow Length', None))
+    elif cls == 'rviz/PointStamped':
+        c.add_point(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), radius=display.get('Radius', None))
     else:
         warning("Class %s not supported yet!"%cls)    
         
