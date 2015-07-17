@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(rviz_to_rwt)
+project(rwt_config_generator)
 
 find_package(catkin REQUIRED
     COMPONENTS rospy

@@ -1,7 +1,7 @@
 from __future__ import print_function
 import sys
 import yaml
-from rviz_to_rwt import *
+from rwt_config_generator import *
 import argparse
 import rospy
 

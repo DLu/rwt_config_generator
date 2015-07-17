@@ -4,7 +4,7 @@ from distutils.core import setup
 from catkin_pkg.python_setup import generate_distutils_setup
 
 package_info = generate_distutils_setup(
-    packages=['rviz_to_rwt'],
+    packages=['rwt_config_generator'],
     package_dir={'': 'src'},
 )
 
