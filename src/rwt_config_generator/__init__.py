@@ -319,7 +319,8 @@ class RWTConfig:
             c = 0
             while name in self.names:
                 c+=1
-                name = '%s%d'%(name, c)
+                name = '%s_%d'%(name, c)
+            self.names.add(name)    
                 
             d['name'] = name
         
