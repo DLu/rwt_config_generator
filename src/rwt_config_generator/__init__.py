@@ -65,7 +65,9 @@ def double(d):
         return d*2                
 
 class RWTConfig:
-    def __init__(self, host='localhost', div_id='robotdisplay', size=(800,600), fixed_frame=None):
+    def __init__(self, host=None, div_id='robotdisplay', size=(800,600), fixed_frame=None):
+        if host is None:
+            host = 'localhost'
         self.div_id = div_id
         self.fixed_frame = fixed_frame
         self.params = {'host': host, 'width': size[0], 'height': size[1], 'div_id': div_id}
