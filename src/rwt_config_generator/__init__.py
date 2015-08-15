@@ -24,6 +24,7 @@ REQUIRED_HEADERS = ['threejs/current/three.min.js', 'EventEmitter2/current/event
                     'roslibjs/current/roslib.min.js', 'ros3djs/current/ros3d.min.js']
 
 COLLADA_HEADERS = ['threejs/current/ColladaLoader.min.js', 'ColladaAnimationCompress/current/ColladaLoader2.min.js']
+BSON_HEADER = 'js-bson/current/bson.min.js'
 
 SCRIPT = """
   /**
@@ -344,6 +345,9 @@ class RWTConfig:
         
     def get_headers(self):
         return '\n'.join([INCLUDE_TEMPLATE%s for s in self.headers])
+        
+    def add_bson_header(self):
+        self.headers.append(BSON_HEADER)    
         
     def __repr__(self):
         d = {}

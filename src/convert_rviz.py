@@ -11,6 +11,7 @@ def warning(*objs):
 parser = argparse.ArgumentParser()
 parser.add_argument('rviz_config')
 parser.add_argument('output_html_file', nargs='?')
+parser.add_argument('-b', '--bson', action='store_true')
 args = parser.parse_args(rospy.myargv()[1:])
 
 rviz = yaml.load( open(args.rviz_config) )['Visualization Manager']
@@ -35,6 +36,9 @@ frame = get('Global Options/Fixed Frame')
 displays = get('Displays')
 
 c = RWTConfig(fixed_frame=frame)
+if args.bson:
+    c.add_bson_header()
+
 for display in displays:
     cls = display['Class']
     if cls == 'rviz/Grid':
