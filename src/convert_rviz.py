@@ -73,6 +73,8 @@ def parse_displays(c, displays):
             c.add_point(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), radius=display.get('Radius', None))
         elif cls == 'rviz/Group':
             parse_displays( c, display['Displays'] )
+        elif cls == 'rviz/Map':
+            c.add_map(topic=display.get('Topic', None), alpha=display.get('Alpha', None), tf=True)
         else:
             warning("Class %s not supported yet!"%cls)    
    

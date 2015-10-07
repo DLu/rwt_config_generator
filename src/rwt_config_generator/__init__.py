@@ -123,13 +123,14 @@ class RWTConfig:
         
         self.add_object(d)
         
-    def add_map(self, name='gridClient', topic=None, tf=False, comment='Setup the map client.'):
+    def add_map(self, name='gridClient', topic=None, tf=False, alpha=None, comment='Setup the map client.'):
         d = OrderedDict()
         d['name'] = name
         d['type'] = 'ROS3D.OccupancyGridClient'
         d['comment'] = comment
         d['ros'] = 'ros'
         d['topic'] = topic
+        d['opacity'] = alpha
         if tf:
             d['tfClient'] = self.add_tf_client()
         d['rootObject'] = 'viewer.scene'
