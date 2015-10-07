@@ -33,52 +33,56 @@ def get(key, d=None):
         if d==None:
             return None
     return d        
+    
+def parse_displays(c, displays):
+    for display in displays:
+        cls = display['Class']
+        if cls == 'rviz/Grid':
+            c.add_grid()
+        elif cls == 'rviz/RobotModel':
+            c.add_model(param=display.get('Robot Description', None), tfPrefix=display.get('TF Prefix', None))        
+        elif cls == 'rviz/Marker':
+            c.add_markers(topic=display.get('Marker Topic', None))
+        elif cls == 'rviz/MarkerArray':
+            c.add_marker_array(topic=display.get('Marker Topic', None))    
+        elif cls == 'rviz/InteractiveMarkers':
+            topic = display.get('Update Topic')
+            topic = topic.replace('/update', '')
+            c.add_imarkers(topic=topic)
+        elif cls == 'rviz/PointCloud2':
+            c.add_pointcloud(topic=display.get('Topic', None), size=display.get('Size (m)', None))
+        elif cls == 'rviz/LaserScan':
+            c.add_laserscan(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), size=display.get('Size (m)', None))
+        elif cls == 'rviz/Path':
+            c.add_path(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)))
+        elif cls == 'rviz/Polygon':
+            c.add_polygon(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)))
+        elif cls == 'rviz/Pose':
+            c.add_pose(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)),
+                shaft_radius=display.get('Shaft Radius', None),
+                head_radius=display.get('Head Radius', None),
+                shaft_length=display.get('Shaft Length', None),
+                head_length=display.get('Head Length', None))
+        elif cls == 'rviz/Odometry':
+            c.add_odometry(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)),
+                shaft_length=display.get('Length', None), keep=display.get('Keep', None))
+
+        elif cls == 'rviz/PoseArray':
+            c.add_posearray(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), length=display.get('Arrow Length', None))
+        elif cls == 'rviz/PointStamped':
+            c.add_point(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), radius=display.get('Radius', None))
+        elif cls == 'rviz/Group':
+            parse_displays( c, display['Displays'] )
+        else:
+            warning("Class %s not supported yet!"%cls)    
+   
 
 frame = get('Global Options/Fixed Frame')
-displays = get('Displays')
 
 c = RWTConfig(host=args.host, fixed_frame=frame)
 if args.bson:
     c.add_bson_header()
-
-for display in displays:
-    cls = display['Class']
-    if cls == 'rviz/Grid':
-        c.add_grid()
-    elif cls == 'rviz/RobotModel':
-        c.add_model(param=display.get('Robot Description', None), tfPrefix=display.get('TF Prefix', None))        
-    elif cls == 'rviz/Marker':
-        c.add_markers(topic=display.get('Marker Topic', None))
-    elif cls == 'rviz/MarkerArray':
-        c.add_marker_array(topic=display.get('Marker Topic', None))    
-    elif cls == 'rviz/InteractiveMarkers':
-        topic = display.get('Update Topic')
-        topic = topic.replace('/update', '')
-        c.add_imarkers(topic=topic)
-    elif cls == 'rviz/PointCloud2':
-        c.add_pointcloud(topic=display.get('Topic', None), size=display.get('Size (m)', None))
-    elif cls == 'rviz/LaserScan':
-        c.add_laserscan(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), size=display.get('Size (m)', None))
-    elif cls == 'rviz/Path':
-        c.add_path(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)))
-    elif cls == 'rviz/Polygon':
-        c.add_polygon(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)))
-    elif cls == 'rviz/Pose':
-        c.add_pose(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)),
-            shaft_radius=display.get('Shaft Radius', None),
-            head_radius=display.get('Head Radius', None),
-            shaft_length=display.get('Shaft Length', None),
-            head_length=display.get('Head Length', None))
-    elif cls == 'rviz/Odometry':
-        c.add_odometry(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)),
-            shaft_length=display.get('Length', None), keep=display.get('Keep', None))
-
-    elif cls == 'rviz/PoseArray':
-        c.add_posearray(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), length=display.get('Arrow Length', None))
-    elif cls == 'rviz/PointStamped':
-        c.add_point(topic=display.get('Topic', None), color=to_hex(display.get('Color', None)), radius=display.get('Radius', None))
-    else:
-        warning("Class %s not supported yet!"%cls)    
+parse_displays(c, get('Displays'))
         
 if args.output_html_file:
     with open(args.output_html_file, 'w') as f:
