@@ -129,7 +129,7 @@ class RWTConfig:
         d['type'] = 'ROS3D.OccupancyGridClient'
         d['comment'] = comment
         d['ros'] = 'ros'
-        d['topic'] = topic
+        d['topic'] = quote(topic)
         d['opacity'] = alpha
         if tf:
             d['tfClient'] = self.add_tf_client()
