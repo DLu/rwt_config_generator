@@ -36,6 +36,8 @@ def get(key, d=None):
     
 def parse_displays(c, displays):
     for display in displays:
+        if not display.get('Enabled', True):
+            continue
         cls = display['Class']
         if cls == 'rviz/Grid':
             c.add_grid()
